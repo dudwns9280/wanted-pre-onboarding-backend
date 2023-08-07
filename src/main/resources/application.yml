@@ -11,3 +11,9 @@ spring:
     properties:
       hibernate:
         show_sql: true
+jwt:
+  grant-type: Bearer
+  header: Authorization
+  access-token:  600000
+  refresh-token: 259200000
+  secret : secret-dashboard-19960928-by-youngjun

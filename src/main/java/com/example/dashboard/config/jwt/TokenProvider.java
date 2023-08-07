@@ -1,6 +1,5 @@
 package com.example.dashboard.config.jwt;
 
-import com.example.dashboard.common.UserRoleEnum;
 import com.example.dashboard.exception.CommonException;
 import com.example.dashboard.exception.ExceptionEnum;
 import io.jsonwebtoken.Claims;
@@ -28,13 +27,12 @@ public class TokenProvider {
     @Value("${jwt.grant-type}")
     private String grantType;
 
-    public JwtToken generateToken(String email, UserRoleEnum userRole) {
+    public JwtToken generateToken(String email) {
         long now = (new Date()).getTime();
         Date accessTokenExpiresIn = new Date(now + ACCESS_TOKEN_VALID_PERIOD);
         final String accessToken = Jwts.builder()
                 .setSubject("authorization")
                 .claim("email", email)
-                .claim("role", userRole)
                 .setExpiration(accessTokenExpiresIn)
                 .signWith(this.getKey())
                 .compact();
@@ -46,7 +44,6 @@ public class TokenProvider {
                 .compact();
 
         return JwtToken.builder()
-                .grantType(grantType)
                 .accessToken(accessToken)
                 .refreshToken(refreshToken)
                 .build();
@@ -72,9 +69,6 @@ public class TokenProvider {
         return (String) this.getClaims(token).get("email");
     }
 
-    public String getRole(String token){
-        return (String) this.getClaims(token).get("role");
-    }
     private Claims getClaims(String token){
          return Jwts.parserBuilder().setSigningKey(this.getKey()).build().parseClaimsJws(token).getBody();
     }
