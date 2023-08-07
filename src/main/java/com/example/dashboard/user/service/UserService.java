@@ -7,6 +7,7 @@ import com.example.dashboard.user.repository.UserRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
@@ -16,11 +17,12 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public User findUserByEmail(String email) {
+    private User findUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(
                 ()-> new CommonException(ExceptionEnum.NOT_FOUND));
     }
 
+    @Transactional
     public void saveUser(String email, String password){
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if(optionalUser.isPresent()) {
@@ -33,6 +35,7 @@ public class UserService {
         userRepository.save(user);
     }
 
+    @Transactional(readOnly = true)
     public User signin(String email, String password) {
         User user = this.findUserByEmail(email);
         if(!passwordEncoder.matches(password, user.getPassword())){
