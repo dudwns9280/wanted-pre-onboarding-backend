@@ -16,11 +16,6 @@ public class UserService {
     private final UserRepository userRepository;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public User findUserById(Long userId){
-        return userRepository.findById(userId)
-                .orElseThrow(()-> new CommonException(ExceptionEnum.NOT_FOUND));
-    }
-
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(
                 ()-> new CommonException(ExceptionEnum.NOT_FOUND));
