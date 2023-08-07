@@ -1,0 +1,18 @@
+version: "3"
+services:
+  dashboard-mysql:
+    platform: linux/x86_64
+    image: amd64/mysql:8.0.33
+    container_name: dashboard-db
+    environment:
+      MYSQL_ROOT_PASSWORD: chlqus310@
+      MYSQL_DATABASE: dashboard
+    ports:
+      - "3306:3306"
+    volumes:
+      - ../dashboard-mysql:/var/lib/mysql
+      - ../dashboard-mysql-conf:/etc/mysql/conf.d
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    restart: always
