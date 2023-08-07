@@ -28,10 +28,8 @@ public class UserController {
     }
     @PostMapping("/signin")
     public ResponseEntity<SigninResponse> signin(@RequestBody @Valid SigninRequest signinRequest){
-        SigninResponse signinResponse = new SigninResponse();
         User user = userService.signin(signinRequest.getEmail(), signinRequest.getPassword());
         JwtToken jwtToken = tokenProvider.generateToken(user.getEmail());
-        signinResponse.from(user, jwtToken);
-        return ResponseEntity.ok(signinResponse);
+        return ResponseEntity.ok(new SigninResponse(user, jwtToken));
     }
 }
