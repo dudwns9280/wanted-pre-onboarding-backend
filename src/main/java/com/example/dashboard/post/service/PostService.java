@@ -9,22 +9,24 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
 
+    @Transactional(readOnly = true)
     public Post getPostById(Long id){
         return postRepository.findById(id)
                 .orElseThrow(()-> new CommonException(ExceptionEnum.NOT_FOUND));
     }
-    public List<Post> findAllPost(){
-        return postRepository.findAll();
+    @Transactional(readOnly = true)
+    public Page<Post> findAllPostByPaging(Pageable pageable){
+        return postRepository.findAll(pageable);
     }
 
+    @Transactional
     public Post savePost(User user, String title, String content){
         Post post = new Post();
         post.setTitle(title);
@@ -32,6 +34,7 @@ public class PostService {
         post.setUser(user);
         return postRepository.save(post);
     }
+    @Transactional
     public Post updatePost(User user, Long postId, String title, String content){
         Post post = this.getPostById(postId);
         if(!user.equals(post.getUser())){
@@ -40,6 +43,7 @@ public class PostService {
         post.updatePost(title, content);
         return postRepository.save(post);
     }
+    @Transactional
     public void deletePostCheckUser(User user, Long postId){
         Post post = this.getPostById(postId);
         if(!user.equals(post.getUser())){
