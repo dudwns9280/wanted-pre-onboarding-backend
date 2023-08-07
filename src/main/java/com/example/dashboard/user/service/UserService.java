@@ -7,6 +7,8 @@ import com.example.dashboard.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class UserService {
@@ -20,6 +22,18 @@ public class UserService {
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email).orElseThrow(
                 ()-> new CommonException(ExceptionEnum.NOT_FOUND));
+    }
+
+    public void saveUser(String email, String password){
+        Optional<User> optionalUser = userRepository.findByEmail(email);
+        if(optionalUser.isPresent()) {
+            throw new CommonException(ExceptionEnum.ALREADY_EXIST, "이미 존재하는 이메일입니다");
+        }
+
+        User user = new User();
+        user.setEmail(email);
+        user.setPassword(password);
+        userRepository.save(user);
     }
 }
 
