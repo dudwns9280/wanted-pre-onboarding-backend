@@ -1,0 +1,21 @@
+.idea/
+out/
+.DS_Store
+*.log
+*.class
+*.jar
+gradle-app.setting
+# Avoid ignoring Gradle wrapper jar file (.jar files are usually ignored)
+!gradle-wrapper.jar
+
+# Avoid ignore Gradle wrappper properties
+!gradle-wrapper.properties
+
+# Cache of project
+.gradletasknamecache
+.gradle
+**/build/
+!src/**/build/
+
+dashboard-mysql/
+dashboard-mysql-conf/
