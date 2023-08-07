@@ -1,7 +1,11 @@
 package com.example.dashboard.user.controller;
 
+import com.example.dashboard.config.jwt.JwtToken;
+import com.example.dashboard.config.jwt.TokenProvider;
 import com.example.dashboard.user.dto.request.SigninRequest;
 import com.example.dashboard.user.dto.request.SignupRequest;
+import com.example.dashboard.user.dto.response.SigninResponse;
+import com.example.dashboard.user.entity.User;
 import com.example.dashboard.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class UserController {
     private final UserService userService;
+    private final TokenProvider tokenProvider;
 
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@RequestBody @Valid SignupRequest signupRequest){
@@ -22,8 +27,11 @@ public class UserController {
         return ResponseEntity.ok().build();
     }
     @PostMapping("/signin")
-    public ResponseEntity<Object> signin(@RequestBody @Valid SigninRequest signinRequest){
-        userService.signin(signinRequest.getEmail(), signinRequest.getPassword());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<SigninResponse> signin(@RequestBody @Valid SigninRequest signinRequest){
+        SigninResponse signinResponse = new SigninResponse();
+        User user = userService.signin(signinRequest.getEmail(), signinRequest.getPassword());
+        JwtToken jwtToken = tokenProvider.generateToken(user.getEmail());
+        signinResponse.from(user, jwtToken);
+        return ResponseEntity.ok(signinResponse);
     }
 }
