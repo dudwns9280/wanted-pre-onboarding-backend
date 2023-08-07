@@ -1,6 +1,7 @@
 package com.example.dashboard.user.controller;
 
-import com.example.dashboard.user.dto.SignupRequest;
+import com.example.dashboard.user.dto.request.SigninRequest;
+import com.example.dashboard.user.dto.request.SignupRequest;
 import com.example.dashboard.user.service.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,11 @@ public class UserController {
     @PostMapping("/signup")
     public ResponseEntity<Object> signup(@RequestBody @Valid SignupRequest signupRequest){
         userService.saveUser(signupRequest.getEmail(), signupRequest.getPassword());
+        return ResponseEntity.ok().build();
+    }
+    @PostMapping("/signin")
+    public ResponseEntity<Object> signin(@RequestBody @Valid SigninRequest signinRequest){
+        userService.signin(signinRequest.getEmail(), signinRequest.getPassword());
         return ResponseEntity.ok().build();
     }
 }
