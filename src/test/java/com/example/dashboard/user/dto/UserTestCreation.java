@@ -34,10 +34,18 @@ public class UserTestCreation {
                 .build();
     }
 
-    public User createUserTest(){
+    public User createUserTest(Long id){
         User user = new User();
+        user.setId(id);
         user.setEmail(email);
         user.setPassword(password);
         return user;
     }
+
+    public Set<SimpleGrantedAuthority> getAuthority() {
+        Set<SimpleGrantedAuthority> authoritySet = new HashSet<>();
+        authoritySet.add(new SimpleGrantedAuthority("user"));
+        return authoritySet;
+    }
+
 }

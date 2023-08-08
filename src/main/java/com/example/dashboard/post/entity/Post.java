@@ -2,6 +2,7 @@ package com.example.dashboard.post.entity;
 
 import com.example.dashboard.user.entity.User;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -17,6 +18,7 @@ public class Post {
 
     @ManyToOne
     @JoinColumn(name = "userId")
+    @NotNull
     private User user;
 
     public void updatePost(String title, String content){

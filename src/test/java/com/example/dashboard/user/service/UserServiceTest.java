@@ -43,7 +43,7 @@ class UserServiceTest{
         @DisplayName("성공 테스트")
         void SignupSuccessTest(){
             //given
-            User user = userTestCreation.createUserTest();
+            User user = userTestCreation.createUserTest(Long.valueOf(1));
 
             given(userRepository.save(any())).willReturn(user);
             given(passwordEncoder.encode(any())).willReturn("1234");
@@ -57,7 +57,7 @@ class UserServiceTest{
         @DisplayName("이미 존재하는 email 실패 경우")
         void SignupFailedTest(){
             //given
-            User user = userTestCreation.createUserTest();
+            User user = userTestCreation.createUserTest(Long.valueOf(1));
 
             given(userRepository.findByEmail(any())).willReturn(Optional.of(user));
             lenient().when(userRepository.save(any())).thenReturn(user);
@@ -77,7 +77,7 @@ class UserServiceTest{
         @DisplayName("성공 테스트")
         void SigninSuccessTest(){
             //given
-            User user = userTestCreation.createUserTest();
+            User user = userTestCreation.createUserTest(Long.valueOf(1));
 
             lenient().when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
             given(passwordEncoder.matches(any(), any())).willReturn(true);
@@ -93,7 +93,7 @@ class UserServiceTest{
         @DisplayName("비밀번호가 맞지 않는 경우")
         void SigninFailedTest(){
             //given
-            User user = userTestCreation.createUserTest();
+            User user = userTestCreation.createUserTest(Long.valueOf(1));
 
             lenient().when(userRepository.findByEmail(any())).thenReturn(Optional.of(user));
             given(passwordEncoder.matches(any(), any())).willReturn(false);

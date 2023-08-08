@@ -75,7 +75,7 @@ public class UserControllerTest {
     void signin() throws Exception{
         //given
         SigninRequest signinRequest = userTestCreation.createSigninRequest();
-        User user = userTestCreation.createUserTest();
+        User user = userTestCreation.createUserTest(Long.valueOf(1));
         JwtToken jwtToken = userTestCreation.createJwtTokenTest();
 
         given(userService.signin(any(), any())).willReturn(user);
