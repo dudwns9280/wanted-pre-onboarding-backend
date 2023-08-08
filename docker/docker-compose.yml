@@ -16,3 +16,16 @@ services:
       - --character-set-server=utf8mb4
       - --collation-server=utf8mb4_unicode_ci
     restart: always
+  dashboard-api:
+    build:
+      context: ../
+    container_name: dashboardApi
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://dashboard-db:3306/dashboard?useSSL=false&allowPublicKeyRetrieval=true
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "chlqus310@"
+    ports:
+      - "18080:8080"
+    depends_on:
+      - dashboard-mysql
+    restart: always

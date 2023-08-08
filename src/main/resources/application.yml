@@ -7,7 +7,13 @@ spring:
   jpa:
     database: mysql
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true
+jwt:
+  grant-type: Bearer
+  header: Authorization
+  access-token:  60000000
+  refresh-token: 259200000
+  secret : secret-dashboard-19960928-by-youngjun
