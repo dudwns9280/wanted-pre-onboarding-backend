@@ -24,7 +24,7 @@ class UserRepositoryTest {
     @DisplayName("새 User 저장")
     public void saveUser() {
         // given
-        User user = userTestCreation.createUserTest();
+        User user = userTestCreation.createUserTest(Long.valueOf(1));
         // when
         User dbUser = userRepository.save(user);
 
@@ -37,7 +37,7 @@ class UserRepositoryTest {
     @DisplayName("id로 user 찾기")
     public void getUserById() {
         // given
-        User user = userTestCreation.createUserTest();
+        User user = userTestCreation.createUserTest(Long.valueOf(1));
         User dbUser = userRepository.save(user);
 
         // when
@@ -53,7 +53,7 @@ class UserRepositoryTest {
     @DisplayName("email로 user 찾기")
     public void getUserByEmail() {
         // given
-        User user = userTestCreation.createUserTest();
+        User user = userTestCreation.createUserTest(Long.valueOf(1));
         User dbUser = userRepository.save(user);
 
         // when
