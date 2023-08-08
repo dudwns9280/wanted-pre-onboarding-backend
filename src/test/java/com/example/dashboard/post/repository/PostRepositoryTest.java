@@ -9,18 +9,21 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DataJpaTest
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Transactional
+@ActiveProfiles("test")
 class PostRepositoryTest {
 
     @Spy
@@ -73,8 +76,9 @@ class PostRepositoryTest {
         User user = userTestCreation.createUserTest(Long.valueOf(1));
         User dbUser = userRepository.save(user);
         List<Post> postList = postTestCreation.createPostListTest(dbUser);
-        List<Post> dbPostList = postRepository.saveAll(postList);
-        Pageable pageable = PageRequest.of(1, 4);
+        List<Post> dbPostList = postRepository.saveAllAndFlush(postList);
+
+        Pageable pageable = PageRequest.of(0, 4);
         // when
         Page<Post> savedPostList = postRepository.findAll(pageable);
 

@@ -96,7 +96,7 @@ class PostServiceTest {
             User user = userTestCreation.createUserTest(Long.valueOf(1));
             List<Post> postList = postTestCreation.createPostListTest(user);
             Page<Post> postPage = postTestCreation.createPostPageTest(user);
-            Pageable pageable = PageRequest.of(1, 4);
+            Pageable pageable = PageRequest.of(0, 4);
 
             given(postRepository.findAll(pageable)).willReturn(postPage);
 

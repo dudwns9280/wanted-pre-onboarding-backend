@@ -30,9 +30,17 @@ public class PostTestCreation {
 
     public Post createPostTest(User user, int number){
         Post post = new Post();
-        post.setId(Long.valueOf(number));
         post.setTitle("테스트 제목"+String.valueOf(number));
         post.setContent("테스트 내용"+String.valueOf(number));
+        post.setUser(user);
+        return post;
+    }
+
+    public Post createPostIncludeIdTest(User user, Long id){
+        Post post = new Post();
+        post.setId(id);
+        post.setTitle("테스트 제목"+String.valueOf(id));
+        post.setContent("테스트 내용"+String.valueOf(id));
         post.setUser(user);
         return post;
     }
