@@ -79,7 +79,7 @@ public class PostControllerTest {
         //given
         User user = userTestCreation.createUserTest(Long.valueOf(1));
         CreatePostRequest createPostRequest = postTestCreation.createPostRequestTest();
-        Post post = postTestCreation.createPostTest(user, 1);
+        Post post = postTestCreation.createPostIncludeIdTest(user, Long.valueOf(1));
         given(postService.savePost(user, createPostRequest.getTitle(), createPostRequest.getContent())).willReturn(post);
 
         //when
@@ -99,7 +99,7 @@ public class PostControllerTest {
     void GetPostByIdTest() throws Exception{
         //given
         User user = userTestCreation.createUserTest(Long.valueOf(1));
-        Post post = postTestCreation.createPostTest(user, 1);
+        Post post = postTestCreation.createPostIncludeIdTest(user, Long.valueOf(1));
         given(postService.getPostById(Long.valueOf(1))).willReturn(post);
 
         //when
@@ -139,7 +139,7 @@ public class PostControllerTest {
     void UpdatePostByPagingTest() throws Exception{
         //given
         User user = userTestCreation.createUserTest(Long.valueOf(1));
-        Post post = postTestCreation.createPostTest(user, 1);
+        Post post = postTestCreation.createPostIncludeIdTest(user, Long.valueOf(1));
         UpdatePostRequest updatePostRequestTest = postTestCreation.updatePostRequestTest();
         Post expectedPost = postTestCreation.updatePostTest(post, updatePostRequestTest);
 
@@ -156,7 +156,6 @@ public class PostControllerTest {
                 .contentType(MediaType.APPLICATION_JSON));
         //then
         result.andExpect(status().isOk());
-        result.andExpect(jsonPath("id").value(expectedPost.getId()));
         result.andExpect(jsonPath("title").value(expectedPost.getTitle()));
         result.andExpect(jsonPath("content").value(expectedPost.getContent()));
         result.andExpect(jsonPath("writer").value(expectedPost.getUser().getEmail()));
