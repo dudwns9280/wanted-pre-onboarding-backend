@@ -82,6 +82,10 @@ AWS 구성 환경 :
 - CustomUserDetail을 통해 JWT token에서 user정보를 가져와 조회
 - post id를 받아 게시글 조회 후 jwt token의 user와 비교하여 작성자 확인.
 - 작성자라면 삭제.
+
+### 추가 과제 테스트 코드 작성
+- Controller, Service, repository Layer 별 테스트 코드 작성.
+- Repository의 경우 H2 in memory DB를 사용하여 테스트 케이스 작성 완료.
 ## API 명세서
 
 ## 기본 정보
