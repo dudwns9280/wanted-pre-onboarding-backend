@@ -79,6 +79,295 @@ AWS 구성 환경 :
 - 작성자라면 삭제.
 ## API 명세서
 
+## 기본 정보
 
-[Overriding vs Overloading](#overriding-vs-overloading)
+### BASE URL : http://15.165.160.0:18080
+
+---
+
+## 전체 간단 목록
+
+| 구분 | URL | method |
+| --- | --- | --- |
+| 회원 가입 | http://15.165.160.0:18080/users/signup | POST |
+| 로그인 | http://15.165.160.0:18080/users/signin | POST |
+| 게시글 생성 | http://15.165.160.0:18080/posts | POST |
+| 게시글 목록 조회 | http://15.165.160.0:18080/posts?page=1&size=4 | GET |
+| 특정 게시글 조회 | http://15.165.160.0:18080/posts/{id} | GET |
+| 특정 게시글 수정 | http://15.165.160.0:18080/posts/{id} | PATCH |
+| 특정 게시글 삭제 | http://15.165.160.0:18080/posts/{id} | DELETE |
+
+---
+
+## User
+
+### 회원 가입
+url : http://15.165.160.0:18080/users/signup  
+method : POST  
+**Request Body**
+
+```
+{
+    "email": "dudwns9280@naver.com",
+    "password" : "12345678"
+}
+```
+
+**Response**
+
+```
+200
+```
+
+**Error : 400**
+
+- 이메일 @ 없을 시
+
+    ```
+    {
+        "status": "BAD_REQUEST",
+        "message": "올바른 이메일 형식을 입력해주세요."
+    }
+    ```
+
+- 비밀번호 8자리 미만일 시
+
+    ```
+    {
+        "status": "BAD_REQUEST",
+        "message": "비밀번호는 8자리 이상으로 입력해주세요"
+    }
+    ```
+
+- 동일한 이메일의 유저가 db상에 이미 존재할 경우
+
+    ```
+    {
+        "status": "BAD_REQUEST",
+        "message": "이미 존재하는 이메일입니다"
+    }
+    ```
+
+### 로그인
+url : http://15.165.160.0:18080/users/signin  
+method : POST  
+**Request Body**
+
+```
+{
+    "email": "dudwns9280@naver.com",
+    "password" : "12345678"
+}
+```
+
+**Response : 200**
+
+```
+{
+    "id": 3,
+    "email": "dudwns9280@naver1.com",
+    "jwtToken": {
+        "accessToken": "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJhdXRob3JpemF0aW9uIiwiZW1haWwiOiJkdWR3bnM5MjgwQG5hdmVyMS5jb20iLCJleHAiOjE2OTE2NjUyODR9.ZG8ER4i4zeDB8SUpXykgm4jQ7WasymsKPwT2UbJdC9Y",
+        "refreshToken": "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6ImR1ZHduczkyODBAbmF2ZXIxLmNvbSIsImV4cCI6MTY5MTkyMzg4NH0.3Bi3I68bW32uk1_ReD7nrKEaBeTzSG9l5gqDX4M1MK0"
+    }
+}
+```
+
+**Response : 400**
+- 이메일 @ 없을 시
+    ```
+    {
+        "status": "BAD_REQUEST",
+        "message": "올바른 이메일 형식을 입력해주세요."
+    }
+    ```
+- 비밀번호 8자리 미만일 시
+    ```
+    {
+        "status": "BAD_REQUEST",
+        "message": "비밀번호는 8자리 이상으로 입력해주세요"
+    }
+    ```
+- 비밀번호가 틀렸을 시
+
+    ```
+    {
+        "status": "BAD_REQUEST",
+        "message": "아이디 혹은 비밀번호 확인 요망"
+    }
+    ```
+**Response: 404**
+- email로 유저를 찾지 못한 경우
+    ```
+    {
+        "status": "NOT_FOUND",
+        "message": "찾을 수 없습니다."
+    }
+    ```
+---
+# **post**
+
+### 게시글 생성
+url : http://15.165.160.0:18080/posts  
+method : POST  
+**Authorization : Bearer Token**  
+```
+  Token
+```
+**Request Body**
+
+```
+{
+    "title":"테스트 게시물",
+    "content":"테스트 입니다."
+}
+```
+
+**Response : 200**
+
+```
+{
+    "id": 1,
+    "title": "테스트 게시물",
+    "content": "테스트 입니다.",
+    "writer": "dudwns9280@naver.com"
+}
+```
+
+**Response : 401**
+- jwt 토큰이 만료되었을 때
+
+    ```
+    {
+        "status": "401",
+        "message": "토큰이 만료되었습니다."
+    }
+    ```
+
+**Response : 403**
+- jwt 토큰이 위/변조 되었을 때
+
+    ```
+    {
+        "status": "403",
+        "message": "토큰이 위조/변조 되었습니다. 다시 발급받아주세요"
+    }
+    ```
+이후로 jwt 만료는 생략.
+
+### 게시글 목록 조회
+url : http://15.165.160.0:18080/posts  
+method : GET  
+**Authorization : Bearer Token** 
+```
+  Token
+```
+**Request Param**
+```
+?page=1&size=4
+```
+
+**Response : 200**
+
+```
+{
+    "postResponseList": [
+        {
+            "id": 2,
+            "title": "테스트 게시물",
+            "content": "테스트 입니다.",
+            "writer": "dudwns9280@naver.com"
+        },
+        {
+            "id": 3,
+            "title": "테스트 게시물",
+            "content": "테스트 입니다.",
+            "writer": "dudwns9280@naver.com"
+        },
+        {
+            "id": 4,
+            "title": "테스트 게시물",
+            "content": "테스트 입니다.",
+            "writer": "dudwns9280@naver.com"
+        },
+        {
+            "id": 5,
+            "title": "테스트 게시물 2",
+            "content": "테스트 입니다. 2",
+            "writer": "dudwns9280@naver.com"
+        }
+    ],
+    "totalPage": 2
+}
+```
+### 특정 게시글 조회
+url : http://15.165.160.0:18080/posts/{id}  
+method : GET  
+**Authorization : Bearer Token**
+```
+  Token
+```
+**Response : 200**
+
+```
+{
+    "id": 5,
+    "title": "테스트 게시물 2",
+    "content": "테스트 입니다. 2",
+    "writer": "dudwns9280@naver.com"
+}
+```
+### 특정 게시글 수정
+url : http://15.165.160.0:18080/posts/{id}  
+method : PATCH  
+**Authorization : Bearer Token**
+```
+  Token
+```
+**Request Body**
+
+```
+{
+    "title":"테스트 게시물 수정",
+    "content":"테스트 입니다...12#!@#"
+}
+```
+
+**Response : 200**
+
+```
+{
+    "id": 2,
+    "title": "테스트 게시물 수정",
+    "content": "테스트 입니다...12#!@#",
+    "writer": "dudwns9280@naver.com"
+}
+```
+
+**Response : 401**
+- 게시물 작성자가 아닌 다른 유저의 jwt 토큰을 넘기면서 수정할 경우.
+```
+{
+  "status": "UNAUTHORIZED",
+  "message": "게시글을 수정할 권한이 없습니다."
+}
+```
+### 특정 게시글 삭제
+url : http://15.165.160.0:18080/{id}  
+method : DELETE  
+**Authorization : Bearer Token**  
+```
+  Token
+```
+
+**Response : 200**
+
+**Response : 401**
+- 게시물 작성자가 아닌 다른 유저의 jwt 토큰을 넘기면서 삭제할 경우.
+```
+{
+    "status": "UNAUTHORIZED",
+    "message": "게시글을 삭제할 권한이 없습니다."
+}
+```
 
