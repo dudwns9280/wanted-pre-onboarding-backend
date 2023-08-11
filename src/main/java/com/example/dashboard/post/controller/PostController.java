@@ -26,7 +26,7 @@ public class PostController {
     private final PostService postService;
     @PostMapping("")
     public ResponseEntity<PostResponse> createPost(@AuthenticationPrincipal CustomUserDetail customUser,
-                                                         @RequestBody @Valid CreatePostRequest createPostRequest){
+                                                         @RequestBody CreatePostRequest createPostRequest){
         Post post = postService.savePost(
                 customUser.getUser(),
                 createPostRequest.getTitle(),
