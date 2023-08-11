@@ -13,11 +13,16 @@ docker-compose up -d
 ### ec2로 배포된 서버
 서버 주소 : http://ec2-15-165-160-0.ap-northeast-2.compute.amazonaws.com:18080  
 AWS 구성 환경 :  
+<img width="750" alt="image" src="https://github.com/dudwns9280/wanted-pre-onboarding-backend/assets/73771805/d5ca1058-93ec-43b7-b70a-252e01cb539a">
+- Dockerfile을 통해 java jar 파일 생성 후 실행 가능한 환경 설정.
+- docker-compose.yml 파일을 통해 세부 설정 및 container끼리 의존도 설정.
+- 프리티어인 t2.micro를 사용하기에 서버 구동하다가 cpu 풀 현상이 확인되어 swapmemory 4gb로 설정하여 사용.
 
 ## 데이터 베이스 테이블 구조
 <img width="562" alt="image" src="https://github.com/dudwns9280/wanted-pre-onboarding-backend/assets/73771805/431efdbc-6e3b-4d1b-a790-2f92fcb400f7">
 
 ## API 동작 데모 영상
+[API 데모 영상_최영준](https://drive.google.com/file/d/1DMC3NsN-W-zTlGAV863aAzjQDRhwlbVZ/view?usp=drive_link)
 
 ## 구현 방법 및 이유에 대한 간략한 설명
 ### 과제 1. 사용자 회원가입 엔드포인트
